@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#16834a">
+<title>STUDY QUEST 2.0</title>
+<style>
+:root{--green:#16834a;--green2:#e8f5ed;--ink:#17231c;--muted:#718078;--line:#e5ece7;--bg:#f5f8f6;--gold:#e2a629}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif}
+button,select{font:inherit}button{cursor:pointer;border:0}
+.app{max-width:1050px;margin:auto;min-height:100vh;padding-bottom:84px}
+header{background:#fff;border-bottom:1px solid var(--line);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:3}
+.brand{font-weight:900;letter-spacing:-.7px;font-size:20px}.brand span{color:var(--green)}
+.profile{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:13px}.avatar{width:34px;height:34px;border-radius:50%;background:var(--green2);display:grid;place-items:center}
+main{padding:20px}.page{display:none}.page.active{display:block}
+h1{font-size:25px;margin:4px 0 6px;letter-spacing:-.8px}h2{font-size:18px;margin:0 0 14px}.sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+.hero{background:linear-gradient(120deg,#146f40,#21965b);color:white;border-radius:22px;padding:22px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.hero small{opacity:.82}.hero strong{font-size:27px;display:block;margin-top:6px}.hero .level{background:#ffffff22;border:1px solid #ffffff40;border-radius:14px;padding:12px;text-align:center;min-width:90px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.stat,.card{background:white;border:1px solid var(--line);border-radius:17px;padding:16px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:21px;margin-top:5px}
+.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.progress{height:9px;background:#edf2ee;border-radius:99px;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;background:var(--green);border-radius:99px}
+.btn{background:var(--green);color:#fff;border-radius:12px;padding:11px 15px;font-weight:750}.btn.light{background:var(--green2);color:var(--green)}.btn:disabled{opacity:.4;cursor:not-allowed}
+.timer{text-align:center;padding:28px 10px}.clock{font-size:clamp(44px,10vw,68px);font-weight:850;letter-spacing:-2px;font-variant-numeric:tabular-nums;margin:20px 0}
+select{padding:11px;border:1px solid var(--line);border-radius:11px;background:white;color:var(--ink);max-width:100%}
+.actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}
+.tabs{display:flex;gap:7px;overflow:auto;margin:14px 0}.chip{padding:9px 13px;background:white;border:1px solid var(--line);border-radius:99px;color:var(--muted);white-space:nowrap}.chip.active{background:var(--green2);color:var(--green);border-color:#b8ddc6}
+.mission{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.mission:last-child{border:0}.mission p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.reward{color:#9b6b08;font-weight:800;font-size:13px;white-space:nowrap}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.product{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px;display:flex;flex-direction:column;min-height:190px}.emoji{font-size:34px;background:#f4f8f5;border-radius:13px;padding:10px;width:fit-content}.product h3{font-size:14px;margin:10px 0 4px}.product small{color:var(--muted);font-size:11px}.product .buy{margin-top:auto;padding-top:12px;display:flex;justify-content:space-between;align-items:center;gap:5px}.coin{color:#a06b00;font-weight:850;font-size:13px}.notice{font-size:12px;color:var(--muted);line-height:1.55;background:#f2f6f3;padding:12px;border-radius:12px;margin:12px 0}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;z-index:5}
+.navinner{width:min(1050px,100%);display:grid;grid-template-columns:repeat(5,1fr)}nav button{background:white;color:#829087;padding:11px 4px 9px;font-size:11px}nav button b{display:block;font-size:19px;margin-bottom:3px}nav button.active{color:var(--green);font-weight:800}
+.history{font-size:13px;color:var(--muted);line-height:1.8}
+@media(max-width:650px){main{padding:15px}.grid2{grid-template-columns:1fr}.products{grid-template-columns:repeat(2,1fr)}.stats{gap:7px}.stat{padding:12px}.stat strong{font-size:18px}.hero{padding:18px}.hero strong{font-size:23px}}
+</style>
+</head>
+<body><div class="app">
+<header><div class="brand">STUDY <span>QUEST</span></div><div class="profile"><span id="headerXP">⭐ 0 XP</span><span id="headerCoin">🪙 0</span><div class="avatar">🧑‍🎓</div></div></header>
+<main>
+<section id="home" class="page active">
+<h1>오늘도 한 단계 성장해 보자!</h1><p class="sub">공부한 만큼 성장하고, 미션을 완료해 보상을 받아 봐.</p>
+<div class="hero"><div><small>오늘의 누적 공부 시간</small><strong id="todayTime">00:00:00</strong><small id="goalText">오늘 목표 60분 · 0% 달성</small><div class="progress" style="background:#ffffff35;width:min(55vw,340px)"><i id="goalBar" style="width:0%;background:#fff"></i></div></div><div class="level"><small>MY LEVEL</small><strong id="level">Lv. 1</strong><small id="xpNext">0 / 100 XP</small></div></div>
+<div class="stats"><div class="stat"><small>누적 공부</small><strong id="totalTime">0분</strong></div><div class="stat"><small>보유 XP</small><strong id="xp">0</strong></div><div class="stat"><small>보유 코인</small><strong id="coins">0</strong></div></div>
+<div class="grid2"><div class="card"><h2>오늘의 미션</h2><div id="homeMissions"></div><button class="btn light" onclick="show('missions')">미션 전체 보기</button></div><div class="card"><h2>빠른 시작</h2><p class="sub">과목을 선택하고 공부를 시작해 봐.</p><button class="btn" onclick="show('timer')">공부 타이머 열기 →</button><div class="notice">공부 기록은 현재 사용 중인 브라우저에 저장돼. 다른 기기와 자동 동기화되지는 않아.</div></div></div>
+</section>
+<section id="timer" class="page"><h1>공부 타이머</h1><p class="sub">과목별 공부 시간을 기록해 보자.</p><div class="card timer"><select id="subject"><option>수학</option><option>영어</option><option>국어</option><option>과학</option><option>사회</option><option>기타</option></select><div class="clock" id="clock">00:00:00</div><div class="actions"><button class="btn" id="start" onclick="startTimer()">시작</button><button class="btn light" id="pause" onclick="pauseTimer()" disabled>일시정지</button><button class="btn light" onclick="stopTimer()">기록 저장</button></div><p class="sub" id="timerStatus">아직 공부를 시작하지 않았어.</p></div></section>
+<section id="missions" class="page"><h1>미션 센터</h1><p class="sub">미션을 완료하면 XP와 코인을 받을 수 있어.</p><div class="tabs"><button class="chip active" onclick="missionTab('daily',this)">일일</button><button class="chip" onclick="missionTab('weekly',this)">주간</button><button class="chip" onclick="missionTab('special',this)">특별</button></div><div class="card" id="missionList"></div><div class="notice">미션 진행도는 이 기기의 공부 기록을 기준으로 계산돼. 보상은 조건을 달성한 뒤 직접 받기를 눌러 수령해.</div></section>
+<section id="store" class="page"><h1>QUEST 상점</h1><p class="sub">공부와 미션으로 모은 코인으로 나만의 보상을 골라 봐.</p><div class="stats"><div class="stat"><small>보유 코인</small><strong id="storeCoins">0 🪙</strong></div><div class="stat"><small>보유 XP</small><strong id="storeXP">0 ⭐</strong></div><div class="stat"><small>보관함</small><strong id="ownedCount">0개</strong></div></div><div class="tabs"><button class="chip active" onclick="storeTab('all',this)">전체</button><button class="chip" onclick="storeTab('GS25',this)">GS25</button><button class="chip" onclick="storeTab('CU',this)">CU</button><button class="chip" onclick="storeTab('owned',this)">보관함</button></div><div class="products" id="products"></div><div class="notice">상점은 게임 속 가상 보상 시스템이야. 코인으로 실제 편의점 결제나 교환이 이루어지지는 않아. 상품 구성과 판매 여부·가격은 매장마다 다를 수 있어.</div></section>
+<section id="statsPage" class="page"><h1>공부 통계</h1><p class="sub">공부 기록을 돌아보고 꾸준함을 확인해 보자.</p><div class="stats"><div class="stat"><small>누적 시간</small><strong id="statTotal">0분</strong></div><div class="stat"><small>공부 횟수</small><strong id="sessions">0회</strong></div><div class="stat"><small>현재 레벨</small><strong id="statLevel">Lv.1</strong></div></div><div class="card"><h2>과목별 공부 시간</h2><div id="subjectStats" class="history">아직 기록이 없어.</div></div><div class="card" style="margin-top:12px"><h2>최근 공부 기록</h2><div id="history" class="history">아직 기록이 없어.</div></div></section>
+</main>
+<nav><div class="navinner"><button class="active" onclick="show('home',this)"><b>⌂</b>홈</button><button onclick="show('timer',this)"><b>◷</b>타이머</button><button onclick="show('missions',this)"><b>⚑</b>미션</button><button onclick="show('store',this)"><b>🛍</b>상점</button><button onclick="show('statsPage',this)"><b>▥</b>통계</button></div></nav>
+</div>
+<script>
+const KEY='studyQuest20';
+let data=JSON.parse(localStorage.getItem(KEY)||'null')||{xp:0,coins:0,total:0,sessions:[],owned:[],claimed:[],dailyKey:'',weeklyKey:''};
+let seconds=0,interval=null,startedAt=0,paused=false,activeMission='daily',activeStore='all';
+const products=[
+{id:'gs-snack',store:'GS25',name:'아이크런치',desc:'과자 · 예시 상품',emoji:'🍪',cost:70},
+{id:'gs-meal',store:'GS25',name:'혜자로운 집밥 제육&치킨난반',desc:'간편식 · 예시 상품',emoji:'🍱',cost:180},
+{id:'gs-sweet',store:'GS25',name:'요거트 찹쌀떡',desc:'디저트 · 예시 상품',emoji:'🍡',cost:110},
+{id:'cu-bread',store:'CU',name:'연세우유 초코크림빵',desc:'필수 상품 · 판매 여부 및 가격은 매장 확인',emoji:'🍫',cost:160},
+{id:'cu-meal',store:'CU',name:'마제소밥&함박정식',desc:'간편식 · 예시 상품',emoji:'🍛',cost:190},
+{id:'cu-snack',store:'CU',name:'트러플하몽 포테이토스틱',desc:'과자 · 예시 상품',emoji:'🥔',cost:90},
+{id:'cu-bread2',store:'CU',name:'연세우유 밀리의 생크림빵',desc:'빵 · 예시 상품',emoji:'🥐',cost:150}
+];
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function dayKey(){return new Date().toLocaleDateString('sv-SE')}
+function weekKey(){let d=new Date(),y=d.getFullYear(),w=Math.ceil((((d-new Date(y,0,1))/86400000)+new Date(y,0,1).getDay()+1)/7);return y+'-W'+w}
+function fmt(s){let h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return [h,m,x].map(v=>String(v).padStart(2,'0')).join(':')}
+function todaySeconds(){return data.sessions.filter(s=>s.date===dayKey()).reduce((a,s)=>a+s.seconds,0)}
+function mins(){return Math.floor(todaySeconds()/60)}
+function level(){return Math.floor(data.xp/100)+1}
+function show(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');else [...document.querySelectorAll('nav button')].find(b=>b.getAttribute('onclick')?.includes("'"+id+"'"))?.classList.add('active');render()}
+function startTimer(){if(interval)return;if(!startedAt)startedAt=Date.now()-seconds*1000;paused=false;interval=setInterval(()=>{seconds=Math.floor((Date.now()-startedAt)/1000);document.getElementById('clock').textContent=fmt(seconds)},500);document.getElementById('start').disabled=true;document.getElementById('pause').disabled=false;document.getElementById('timerStatus').textContent='공부 중…'}
+function pauseTimer(){if(!interval)return;clearInterval(interval);interval=null;paused=true;document.getElementById('start').disabled=false;document.getElementById('pause').disabled=true;document.getElementById('timerStatus').textContent='일시정지 상태야.'}
+function stopTimer(){if(interval)clearInterval(interval);interval=null;if(seconds>=60){let s=seconds,subject=document.getElementById('subject').value;data.sessions.unshift({seconds:s,subject,date:dayKey(),at:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})});data.total+=s;let earned=Math.floor(s/60);data.xp+=earned;document.getElementById('timerStatus').textContent=`${Math.floor(s/60)}분 기록 · ${earned} XP 획득!`}else document.getElementById('timerStatus').textContent='1분 미만 기록은 저장하지 않았어.';seconds=0;startedAt=0;paused=false;document.getElementById('clock').textContent='00:00:00';document.getElementById('start').disabled=false;document.getElementById('pause').disabled=true;save()}
+function missionDefs(){let m=mins(),week=data.sessions.filter(s=>{let d=new Date(s.date),now=new Date();return (now-d)/86400000<7}).reduce((a,s)=>a+s.seconds,0)/60;return{
+daily:[['d30','오늘 30분 공부하기',m,30,30,15],['d60','오늘 60분 공부하기',m,60,50,25],['d120','오늘 120분 공부하기',m,120,80,40]],
+weekly:[['w5','공부 기록 5회 만들기',data.sessions.filter(s=>(new Date()-new Date(s.date))/86400000<7).length,5,120,60],['w600','이번 주 10시간 공부하기',week,600,180,90]],
+special:[['s3','서로 다른 과목 3개 공부하기',new Set(data.sessions.map(s=>s.subject)).size,3,100,50],['s180','하루 3시간 도전하기',m,180,150,75]]
+}}
+function missionTab(t,b){activeMission=t;document.querySelectorAll('#missions .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderMissions()}
+function claim(id,xp,coin){if(data.claimed.includes(id))return;data.claimed.push(id);data.xp+=xp;data.coins+=coin;save()}
+function renderMissions(){let list=missionDefs()[activeMission];document.getElementById('missionList').innerHTML=list.map(([id,name,now,target,xp,coin])=>{let done=now>=target,claimed=data.claimed.includes(id+(activeMission==='daily'?dayKey():activeMission==='weekly'?weekKey():'')),key=id+(activeMission==='daily'?dayKey():activeMission==='weekly'?weekKey():'');return `<div class="mission"><div><b>${name}</b><p>${Math.min(Math.floor(now),target)} / ${target}${id[0]==='w'?'':'분'} · 보상 ${xp} XP + ${coin} 코인</p></div><button class="btn ${claimed?'light':''}" ${!done||claimed?'disabled':''} onclick="claim('${key}',${xp},${coin})">${claimed?'수령 완료':done?'보상 받기':'진행 중'}</button></div>`}).join('')}
+function storeTab(t,b){activeStore=t;document.querySelectorAll('#store .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderProducts()}
+function buy(id){let p=products.find(x=>x.id===id);if(data.owned.includes(id)||data.coins<p.cost)return;data.coins-=p.cost;data.owned.push(id);save()}
+function renderProducts(){let items=activeStore==='owned'?products.filter(p=>data.owned.includes(p.id)):products.filter(p=>activeStore==='all'||p.store===activeStore);document.getElementById('products').innerHTML=items.length?items.map(p=>{let owned=data.owned.includes(p.id);return `<div class="product"><div class="emoji">${p.emoji}</div><small>${p.store}</small><h3>${p.name}</h3><small>${p.desc}</small><div class="buy"><span class="coin">🪙 ${p.cost}</span><button class="btn ${owned?'light':''}" ${owned||data.coins<p.cost?'disabled':''} onclick="buy('${p.id}')">${owned?'보유 중':'구매'}</button></div></div>`}).join(''):'<p class="sub">아직 보관한 아이템이 없어.</p>'}
+function render(){document.getElementById('headerXP').textContent='⭐ '+data.xp+' XP';document.getElementById('headerCoin').textContent='🪙 '+data.coins;document.getElementById('xp').textContent=data.xp;document.getElementById('coins').textContent=data.coins;document.getElementById('storeCoins').textContent=data.coins+' 🪙';document.getElementById('storeXP').textContent=data.xp+' ⭐';document.getElementById('ownedCount').textContent=data.owned.length+'개';document.getElementById('level').textContent='Lv. '+level();document.getElementById('xpNext').textContent=(data.xp%100)+' / 100 XP';document.getElementById('todayTime').textContent=fmt(todaySeconds());document.getElementById('goalText').textContent=`오늘 목표 60분 · ${Math.min(100,Math.floor(mins()/60*100))}% 달성`;document.getElementById('goalBar').style.width=Math.min(100,mins()/60*100)+'%';document.getElementById('totalTime').textContent=Math.floor(data.total/60)+'분';document.getElementById('homeMissions').innerHTML=missionDefs().daily.slice(0,2).map(x=>`<div class="mission"><div><b>${x[1]}</b><p>${Math.min(x[2],x[3])}/${x[3]}분</p></div><span class="reward">+${x[4]} XP</span></div>`).join('');document.getElementById('statTotal').textContent=Math.floor(data.total/60)+'분';document.getElementById('sessions').textContent=data.sessions.length+'회';document.getElementById('statLevel').textContent='Lv.'+level();let subjects={};data.sessions.forEach(s=>subjects[s.subject]=(subjects[s.subject]||0)+s.seconds);document.getElementById('subjectStats').innerHTML=Object.keys(subjects).length?Object.entries(subjects).map(([k,v])=>`${k}: ${Math.floor(v/60)}분`).join('<br>'):'아직 기록이 없어.';document.getElementById('history').innerHTML=data.sessions.slice(0,8).map(s=>`${s.date} ${s.at} · ${s.subject} · ${Math.floor(s.seconds/60)}분`).join('<br>')||'아직 기록이 없어.';if(document.getElementById('missions').classList.contains('active'))renderMissions();if(document.getElementById('store').classList.contains('active'))renderProducts()}
+render();
+</script></body></html>
